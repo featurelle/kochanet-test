@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class GenderChoices(models.TextChoices):
@@ -17,6 +18,16 @@ class Patient(models.Model):
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
+
+    @property
+    def age(self):
+        today = timezone.now().date()
+        age = int(
+            today.year
+            - self.birthdate.year
+            - ((today.month, today.day) < (self.birthdate.month, self.birthdate.day))
+        )
+        return age
 
     def __str__(self):
         return f'Patient {self.pk} ({self.full_name})'
