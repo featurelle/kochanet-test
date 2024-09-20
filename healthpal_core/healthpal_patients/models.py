@@ -9,20 +9,13 @@ class GenderChoices(models.TextChoices):
 class Patient(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
-    full_name = models.GeneratedField(
-        expression=models.Func(
-            models.F('first_name'),
-            models.Value(' '),
-            models.F('last_name'),
-            function='CONCAT'
-        ),
-        editable=False,
-        output_field=models.CharField()
-    )
     gender = models.CharField(choices=GenderChoices.choices)
     phone = models.CharField()
     address = models.CharField()
 
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
     def __str__(self):
         return f'Patient {self.pk} ({self.full_name})'
