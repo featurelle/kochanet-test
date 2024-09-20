@@ -21,6 +21,7 @@ class Patient(models.Model):
     )
     gender = models.CharField(choices=GenderChoices.choices)
     phone = models.CharField()
+    address = models.CharField()
 
 
     def __str__(self):
