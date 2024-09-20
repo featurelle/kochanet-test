@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'healthpal_core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('HEALTHPAL_DJANGO_DB_NAME'),
+        'USER': config('HEALTHPAL_DJANGO_DB_USER'),
+        'PASSWORD': config('HEALTHPAL_DJANGO_DB_PASS'),
+        'HOST': config('HEALTHPAL_DJANGO_DB_HOST', default='localhost'),
+        'PORT': config('HEALTHPAL_DJANGO_DB_PORT', default='5432'),
     }
 }
 
