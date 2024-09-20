@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from email.policy import default
 from pathlib import Path
 from decouple import config
 
@@ -24,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('HEALTHPAL_DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('HEALTHPAL_DJANGO_DEBUG', cast='bool', default=True)
+DEBUG = config('HEALTHPAL_DJANGO_DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = []
 
