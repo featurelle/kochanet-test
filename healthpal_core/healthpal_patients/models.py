@@ -10,6 +10,7 @@ class Patient(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
     gender = models.CharField(choices=GenderChoices.choices)
+    birthdate = models.DateField()
     phone = models.CharField()
     address = models.CharField()
 
