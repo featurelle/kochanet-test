@@ -20,7 +20,12 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
+        # Auth
+        path('auth/', include('dj_rest_auth.urls')),  # Includes login, logout, JWT handling
+        path('auth/registration/', include('dj_rest_auth.registration.urls')),  # Includes registration and email verification
+
+        # Domain logic
         path('patients/', include('healthpal_patients.urls')),
-        path('assessments/', include('healthpal_assessments.urls'))
+        path('assessments/', include('healthpal_assessments.urls')),
     ]))
 ]
