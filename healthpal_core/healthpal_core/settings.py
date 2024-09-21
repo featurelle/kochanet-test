@@ -73,6 +73,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'healthpal_core.urls'
 
+APPEND_SLASH = False    # Turn off redirects for misspelled endpoints (e.g. POST api/sth -> GET api/sth/)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
