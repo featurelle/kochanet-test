@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from dateutils import relativedelta
 
 
 class GenderChoices(models.TextChoices):
@@ -11,7 +12,7 @@ class Patient(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
     gender = models.CharField(choices=GenderChoices.choices)
-    birthdate = models.DateField()
+    birthdate = models.DateField()  # Todo: not in the future
     phone = models.CharField()
     address = models.CharField()
 
@@ -22,11 +23,7 @@ class Patient(models.Model):
     @property
     def age(self):
         today = timezone.now().date()
-        age = int(
-            today.year
-            - self.birthdate.year
-            - ((today.month, today.day) < (self.birthdate.month, self.birthdate.day))
-        )
+        age = relativedelta(today, self.birthdate).years
         return age
 
     def __str__(self):
