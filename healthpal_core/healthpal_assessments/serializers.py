@@ -18,22 +18,23 @@ class PatientAssessmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         qna_rounds_data = validated_data.pop('qna_rounds', [])
-        patient_assessment = PatientAssessment.objects.create(**validated_data)
+
+        # Create PatientAssessment
+        patient_assessment = super().create(validated_data)
+
+        # Handle AssessmentQnARounds creation if provided
         for qna_round_data in qna_rounds_data:
             AssessmentQnARound.objects.create(patient_assessment=patient_assessment, **qna_round_data)
+
         return patient_assessment
 
     def update(self, instance, validated_data):
         qna_rounds_data = validated_data.pop('qna_rounds', None)
 
         # Update PatientAssessment fields if provided
-        instance.patient = validated_data.get('patient', instance.patient)
-        instance.type = validated_data.get('type', instance.type)
-        instance.datetime = validated_data.get('datetime', instance.datetime)
-        instance.score = validated_data.get('score', instance.score)
-        instance.save()
+        super().update(instance, validated_data)
 
-        # Handle QnARound updates if provided
+        # Handle AssessmentQnARounds updates if provided
         if qna_rounds_data is not None:
             instance.qna_rounds.all().delete()
             for qna_round_data in qna_rounds_data:
