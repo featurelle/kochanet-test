@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +26,7 @@ SECRET_KEY = config('HEALTHPAL_DJANGO_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('HEALTHPAL_DJANGO_DEBUG', cast=bool, default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('HEALTHPAL_DJANGO_ALLOWED_HOSTS', cast=Csv(), default='localhost,')
 
 
 # Application definition
