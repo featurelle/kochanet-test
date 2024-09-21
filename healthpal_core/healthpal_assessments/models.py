@@ -21,4 +21,14 @@ class AssessmentQnARound(models.Model):
     answer = models.CharField()
 
     def __str__(self):
-        return f'QnA Round {self.pk} (Assessment {self.patient_assessment}, "{self.question[:15]}")'
+        question = self.question
+        question_short = question if len(question) <= 15 else question[:25] + '...'
+
+        return (
+            f'QnA Round {self.pk} '
+            f'('
+            f'Assessment {self.patient_assessment.pk}, '
+            f'{self.patient_assessment.patient.full_name}, '
+            f'"{question_short}"'
+            f')'
+        )   # e.g. QnA Round 1, (Assessment 1, John Doe, "So how are feeling, Joh...")
