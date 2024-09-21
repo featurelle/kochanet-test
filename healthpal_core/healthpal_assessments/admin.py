@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import PatientAssessment, AssessmentQnARound
+
+
+@admin.register(PatientAssessment)
+class PatientAssessmentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(AssessmentQnARound)
+class AssessmentQnARoundAdmin(admin.ModelAdmin):
+    pass

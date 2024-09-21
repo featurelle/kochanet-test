@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import PatientAssessment
+from .serializers import PatientAssessmentSerializer
 
-# Create your views here.
+
+class PatientAssessmentListCreateView(generics.ListCreateAPIView):
+    queryset = PatientAssessment.objects.all()
+    serializer_class = PatientAssessmentSerializer
+
+
+class PatientAssessmentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PatientAssessment.objects.all()
+    serializer_class = PatientAssessmentSerializer
