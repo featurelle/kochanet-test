@@ -26,7 +26,7 @@ SECRET_KEY = config('HEALTHPAL_DJANGO_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('HEALTHPAL_DJANGO_DEBUG', cast=bool, default=True)
 
-ALLOWED_HOSTS = config('HEALTHPAL_DJANGO_ALLOWED_HOSTS', cast=Csv(), default='localhost,')
+ALLOWED_HOSTS = config('HEALTHPAL_DJANGO_ALLOWED_HOSTS', cast=Csv(), default='localhost, 127.0.0.1')
 
 
 # Application definition
@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+
+    # View filters
+    'django_filters',
 
     # Aren't used directly, the dependencies of dj-rest-auth for Auth
     'allauth',
