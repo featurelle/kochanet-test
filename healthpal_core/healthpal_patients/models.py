@@ -1,9 +1,11 @@
 from datetime import date
 
-from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator, MinLengthValidator
+from django.core.validators import RegexValidator, MinValueValidator, MinLengthValidator
 from django.db import models
 from django.utils import timezone
 from dateutils import relativedelta
+
+from healthpal_util.validators import get_date_not_future_validator
 
 
 # Helper functions
@@ -47,11 +49,7 @@ address_google_place_id_regex_validator = RegexValidator(
     message="Invalid Google Place ID format. Use digits, letters, underscores, or hyphens."
 )
 
-def get_timezone_now_date() -> date:
-    return timezone.now().date()
-
-birthdate_not_future_max_validator = MaxValueValidator(
-    limit_value=get_timezone_now_date,
+birthdate_not_future_max_validator = get_date_not_future_validator(
     message="Birthdate cannot be in the future."
 )
 
