@@ -1,18 +1,21 @@
 from unittest import mock
 
+from django.core.serializers import serialize
 from django.test import TestCase
 from django.utils import timezone
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+
+from rest_framework.exceptions import ValidationError
 
 from .models import Patient, GenderChoices
+from .serializers import PatientSerializer
 
 
 class PatientModelTest(TestCase):
 
     def setUp(self):
         self.patient = Patient.objects.create(
-            first_name="John",
-            last_name="Doe",
+            full_name="John Doe",
             gender=GenderChoices.MALE,
             birthdate=date(1990, 6, 15),
             phone="1234567890",
@@ -32,3 +35,74 @@ class PatientModelTest(TestCase):
         test_against_date(2024, 6, 15, 34)
         test_against_date(2025, 1, 1, 34)
         test_against_date(2026, 1, 1, 35)
+
+
+class PatientSerializerTest(TestCase):
+
+    def setUp(self):
+        self.valid_data = {
+            'full_name': 'John Doe',
+            'gender': 'm',
+            'birthdate': str(date.today() - timedelta(days=365 * 30)),  # 30 years old
+            'phone': '1234567890',
+            'address': 'ChIJN1t_tDeuEmsRUsoyG83frY4'  # Sample Google Place ID
+        }
+
+    # Full name validation tests
+    def test_valid_full_name(self):
+        data = self.valid_data.copy()
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_invalid_full_name(self):
+        data = self.valid_data.copy()
+        data['full_name'] = 'John123'  # Invalid full name (contains numbers)
+        serializer = PatientSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
+
+    # Birthdate validation tests
+    def test_valid_birthdate(self):
+        data = self.valid_data.copy()
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_future_birthdate(self):
+        data = self.valid_data.copy()
+        data['birthdate'] = date.today() + timedelta(days=1)  # Birthdate in the future
+        serializer = PatientSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
+
+    def test_ancient_birthdate(self):
+        data = self.valid_data.copy()
+        data['birthdate'] = date.today() - timedelta(days=365 * 150)  # More than 120 years old
+        serializer = PatientSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
+
+    # Phone number validation tests
+    def test_valid_phone(self):
+        data = self.valid_data.copy()
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_invalid_phone(self):
+        data = self.valid_data.copy()
+        data['phone'] = 'abc123'  # Invalid phone (contains letters)
+        serializer = PatientSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
+
+    # Address validation tests
+    def test_valid_address(self):
+        data = self.valid_data.copy()
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_invalid_address(self):
+        data = self.valid_data.copy()
+        data['address'] = 'Invalid!ID@'  # Invalid address (contains special characters)
+        serializer = PatientSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
