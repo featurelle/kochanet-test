@@ -6,4 +6,3 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
-        read_only_fields = ['full_name']
