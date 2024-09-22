@@ -6,12 +6,12 @@ from healthpal_patients.models import Patient
 class PatientAssessment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     type = models.CharField()
-    datetime = models.DateTimeField()
+    date = models.DateField()
     score = models.PositiveSmallIntegerField()
     # qna_rounds m2o
 
     def __str__(self):
-        return f'Assessment {self.pk} ({self.patient.full_name}, {self.datetime})'
+        return f'Assessment {self.pk} ({self.patient.full_name}, {self.date})'
 
 
 class AssessmentQnARound(models.Model):
