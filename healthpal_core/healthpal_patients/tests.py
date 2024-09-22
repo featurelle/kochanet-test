@@ -20,7 +20,7 @@ class PatientModelTest(TestCase):
         )
 
     def test_age(self):
-        """Test that the age is calculated correctly."""
+        """Test that the age is calculated correctly"""
 
         def test_against_date(year, month, day, expected_age):
             # Mock the specific "current" date and evaluate the age
