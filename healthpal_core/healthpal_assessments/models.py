@@ -78,9 +78,7 @@ class AssessmentQnARound(models.Model):
         related_name='qna_rounds'
     )
     # Since there's no way to guess qna format, neither validations nor max_length are applied for now
-    question = models.CharField(
-        null=False
-    )
+    question = models.CharField()
     answer = models.CharField()
 
     class Meta:
