@@ -8,5 +8,5 @@ class PatientSerializer(serializers.ModelSerializer):
         exclude = ['assigned_clinician']
 
     def create(self, validated_data):
-        validated_data['assigned_clinician'] = self.context['request'].user.pk
+        validated_data['assigned_clinician'] = self.context['request'].user
         return super().create(validated_data)
