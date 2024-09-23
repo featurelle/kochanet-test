@@ -31,7 +31,7 @@ class GenderChoices(models.TextChoices):
 # Validators
 full_name_min_length_validator = MinLengthValidator(
     limit_value=2,
-    message="Name should have at least 2 symbols"
+    message="Name should have at least 2 symbols."
 )
 
 full_name_regex_validator = RegexValidator(
@@ -45,7 +45,7 @@ phone_regex_validator = RegexValidator(
 )
 
 address_google_place_id_regex_validator = RegexValidator(
-    regex=r"^[A-Za-z0-9_\-]+$",
+    regex=r"^[A-Za-z0-9_-]+$",
     message="Invalid Google Place ID format. Use digits, letters, underscores, or hyphens."
 )
 
