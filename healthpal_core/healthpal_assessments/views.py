@@ -33,10 +33,15 @@ class SmallResultsSetPagination(PageNumberPagination):
     max_page_size = 100
 
 
-# Views
-class PatientAssessmentListCreateView(generics.ListCreateAPIView):
-    queryset = PatientAssessment.objects.all()
+class UserFilteredAccessMixin:
     serializer_class = PatientAssessmentSerializer
+
+    def get_queryset(self):
+        return PatientAssessment.objects.filter(patient__assigned_clinician=self.request.user)
+
+
+# Views
+class PatientAssessmentListCreateView(UserFilteredAccessMixin, generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
     filterset_class = PatientAssessmentFilter
     pagination_class = SmallResultsSetPagination
@@ -44,6 +49,5 @@ class PatientAssessmentListCreateView(generics.ListCreateAPIView):
     ordering = ['date']  # Default ordering
 
 
-class PatientAssessmentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PatientAssessment.objects.all()
-    serializer_class = PatientAssessmentSerializer
+class PatientAssessmentRetrieveUpdateDestroyView(UserFilteredAccessMixin, generics.RetrieveUpdateDestroyAPIView):
+    pass

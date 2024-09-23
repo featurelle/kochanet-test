@@ -5,4 +5,8 @@ from .models import Patient
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
-        fields = '__all__'
+        exclude = ['assigned_clinician']
+
+    def create(self, validated_data):
+        validated_data['assigned_clinician'] = self.context['request'].user.pk
+        return super().create(validated_data)

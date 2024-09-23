@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator, MinValueValidator, MinLengthValidator
 from django.db import models
 from django.utils import timezone
@@ -64,6 +65,13 @@ birthday_not_ancient_min_validator = MinValueValidator(
 
 # Model
 class Patient(models.Model):
+    assigned_clinician = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=False,
+        related_name='assigned_patients'
+    )
     full_name = models.CharField(
         validators=[full_name_min_length_validator, full_name_regex_validator],
         max_length=255

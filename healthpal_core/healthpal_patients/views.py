@@ -4,10 +4,18 @@ from .models import Patient
 from .serializers import PatientSerializer
 
 
-class PatientListCreateView(generics.ListCreateAPIView):
-    queryset = Patient.objects.all()
+# Utility class
+class UserFilteredAccessMixin:
     serializer_class = PatientSerializer
 
-class PatientRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Patient.objects.all()
-    serializer_class = PatientSerializer
+    def get_queryset(self):
+        return Patient.objects.filter(assigned_clinician=self.request.user)
+
+
+# Views
+class PatientListCreateView(UserFilteredAccessMixin, generics.ListCreateAPIView):
+    pass
+
+
+class PatientRetrieveUpdateDestroyView(UserFilteredAccessMixin, generics.RetrieveUpdateDestroyAPIView):
+    pass

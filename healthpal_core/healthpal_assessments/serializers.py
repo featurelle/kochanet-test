@@ -18,6 +18,17 @@ class PatientAssessmentSerializer(serializers.ModelSerializer):
         model = PatientAssessment
         fields = '__all__'
 
+    def validate_patient(self, value):
+        #Restrict assigning assessments for patients that are not yours
+        patient_id = self.get_initial().get('patient')
+        current_clinician = self.context['request'].user
+        assigned_patients_ids = current_clinician.assigned_patients.values_list('id', flat=True)
+
+        if patient_id not in assigned_patients_ids:
+            raise serializers.ValidationError("You cannot assign assessments to patients not assigned to you.")
+
+        return value
+
     def validate_date(self, value):
         patient_id = self.get_initial().get('patient')
 
@@ -41,6 +52,8 @@ class PatientAssessmentSerializer(serializers.ModelSerializer):
         # Since required=True on m2o only checks for None, we should test other empty values manually
         if not value:
             raise serializers.ValidationError('This field is required.')
+
+        return value
 
     def create(self, validated_data):
         qna_rounds_data = validated_data.pop('qna_rounds', [])
