@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from healthpal_patients.models import Patient
-from healthpal_util.validators import get_date_not_future_validator
+from healthpal_shared.validators import get_date_not_future_validator
 
 
 # Validators
