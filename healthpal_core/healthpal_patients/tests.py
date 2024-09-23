@@ -1,6 +1,5 @@
 from unittest import mock
 
-from django.core.serializers import serialize
 from django.test import TestCase
 from django.utils import timezone
 from datetime import date, datetime, timedelta
@@ -19,12 +18,10 @@ class PatientModelTest(TestCase):
             gender=GenderChoices.MALE,
             birthdate=date(1990, 6, 15),
             phone="1234567890",
-            address="123 Main St"
+            address="Cn432423432"
         )
 
-    def test_age(self):
-        """Test that the age is calculated correctly"""
-
+    def test_age_calculation(self):
         def test_against_date(year, month, day, expected_age):
             # Mock the specific "current" date and evaluate the age
             mock_current_date = datetime(year, month, day, 12, 0, 0)
