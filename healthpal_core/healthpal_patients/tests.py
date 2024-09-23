@@ -45,8 +45,7 @@ class PatientSerializerTest(TestCase):
             'address': 'ChIJN1t_tDeuEmsRUsoyG83frY4'  # Sample Google Place ID
         }
 
-    # Full name validation tests
-    def test_valid_full_name(self):
+    def test_valid_data(self):
         data = self.valid_data.copy()
         serializer = PatientSerializer(data=data)
         self.assertTrue(serializer.is_valid())
@@ -58,31 +57,19 @@ class PatientSerializerTest(TestCase):
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
 
-    # Birthdate validation tests
-    def test_valid_birthdate(self):
+    def test_invalid_birthdate_future(self):
         data = self.valid_data.copy()
-        serializer = PatientSerializer(data=data)
-        self.assertTrue(serializer.is_valid())
-
-    def test_future_birthdate(self):
-        data = self.valid_data.copy()
-        data['birthdate'] = date.today() + timedelta(days=1)  # Birthdate in the future
+        data['birthdate'] = (date.today() + timedelta(days=1)).isoformat()  # Birthdate in the future
         serializer = PatientSerializer(data=data)
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
 
-    def test_ancient_birthdate(self):
+    def test_invalid_birthdate_ancient(self):
         data = self.valid_data.copy()
-        data['birthdate'] = date.today() - timedelta(days=365 * 150)  # More than 120 years old
+        data['birthdate'] = (date.today() - timedelta(days=365 * 150)).isoformat()  # More than 120 years old
         serializer = PatientSerializer(data=data)
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
-
-    # Phone number validation tests
-    def test_valid_phone(self):
-        data = self.valid_data.copy()
-        serializer = PatientSerializer(data=data)
-        self.assertTrue(serializer.is_valid())
 
     def test_invalid_phone(self):
         data = self.valid_data.copy()
@@ -90,12 +77,6 @@ class PatientSerializerTest(TestCase):
         serializer = PatientSerializer(data=data)
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
-
-    # Address validation tests
-    def test_valid_address(self):
-        data = self.valid_data.copy()
-        serializer = PatientSerializer(data=data)
-        self.assertTrue(serializer.is_valid())
 
     def test_invalid_address(self):
         data = self.valid_data.copy()
