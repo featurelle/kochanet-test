@@ -155,6 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Rest framework settings
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',  # Use JWT
@@ -166,10 +167,12 @@ REST_FRAMEWORK = {
 
 
 # For Auth
+
 SITE_ID = 1
 
 
 # Third-party apps settings
+
 # dj-rest-auth
 REST_AUTH = {
     'USE_JWT': True,
