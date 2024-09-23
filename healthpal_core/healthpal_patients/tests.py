@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 
 from rest_framework.exceptions import ValidationError
 
+from healthpal_shared.tests import BaseSerializerTestCase
 from .models import Patient, GenderChoices
 from .serializers import PatientSerializer
 
@@ -34,7 +35,9 @@ class PatientModelTest(TestCase):
         test_against_date(2026, 1, 1, 35)
 
 
-class PatientSerializerTest(TestCase):
+class PatientSerializerTest(BaseSerializerTestCase):
+
+    serializer_class = PatientSerializer
 
     def setUp(self):
         self.valid_data = {
@@ -46,41 +49,27 @@ class PatientSerializerTest(TestCase):
         }
 
     def test_valid_data(self):
-        data = self.valid_data.copy()
-        serializer = PatientSerializer(data=data)
-        self.assertTrue(serializer.is_valid())
+        self._test_valid_data()
 
     def test_invalid_full_name(self):
-        data = self.valid_data.copy()
-        data['full_name'] = 'John123'  # Invalid full name (contains numbers)
-        serializer = PatientSerializer(data=data)
-        with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+        invalid_full_name_format = 'John123'
 
-    def test_invalid_birthdate_future(self):
-        data = self.valid_data.copy()
-        data['birthdate'] = (date.today() + timedelta(days=1)).isoformat()  # Birthdate in the future
-        serializer = PatientSerializer(data=data)
-        with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+        self._test_invalid_data_part({'full_name': invalid_full_name_format})
 
-    def test_invalid_birthdate_ancient(self):
-        data = self.valid_data.copy()
-        data['birthdate'] = (date.today() - timedelta(days=365 * 150)).isoformat()  # More than 120 years old
-        serializer = PatientSerializer(data=data)
-        with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+    def test_invalid_birthdate(self):
+        invalid_birthdate_future = (date.today() + timedelta(days=1)).isoformat()
+        invalid_birthdate_ancient = (date.today() - timedelta(days=365 * 150)).isoformat()
+
+        key = 'birthdate'
+
+        self._test_invalid_data_part({key: invalid_birthdate_future})
+        self._test_invalid_data_part({key: invalid_birthdate_ancient})
 
     def test_invalid_phone(self):
-        data = self.valid_data.copy()
-        data['phone'] = 'abc123'  # Invalid phone (contains letters)
-        serializer = PatientSerializer(data=data)
-        with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+        invalid_phone_format = 'abc123'
+
+        self._test_invalid_data_part({'phone': invalid_phone_format})
 
     def test_invalid_address(self):
-        data = self.valid_data.copy()
-        data['address'] = 'Invalid!ID@'  # Invalid address (contains special characters)
-        serializer = PatientSerializer(data=data)
-        with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+        invalid_address_format = 'Invalid!ID@'
+        self._test_invalid_data_part({'address': invalid_address_format})
