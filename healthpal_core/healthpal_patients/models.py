@@ -5,7 +5,7 @@ from django.db import models
 from django.utils import timezone
 from dateutils import relativedelta
 
-from healthpal_util.validators import get_date_not_future_validator
+from healthpal_shared.validators import get_date_not_future_validator
 
 
 # Helper functions
