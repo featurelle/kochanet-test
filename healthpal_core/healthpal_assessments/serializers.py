@@ -37,6 +37,11 @@ class PatientAssessmentSerializer(serializers.ModelSerializer):
 
         return value
 
+    def validate_qna_rounds(self, value):
+        # Since required=True on m2o only checks for None, we should test other empty values manually
+        if not value:
+            raise serializers.ValidationError('This field is required.')
+
     def create(self, validated_data):
         qna_rounds_data = validated_data.pop('qna_rounds', [])
 
