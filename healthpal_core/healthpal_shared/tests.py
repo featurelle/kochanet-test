@@ -1,3 +1,4 @@
+from django.utils.translation.template import context_re
 from rest_framework.exceptions import ValidationError
 from django.test import TestCase
 
@@ -14,15 +15,22 @@ class BaseSerializerTestCase(TestCase):
         if not cls.serializer_class:
             raise ValueError(f"{cls.__name__} must define 'serializer_class'.")
 
-    def _test_valid_data(self):
+    def _test_valid_data(self, request_context = None):
         """You should define self.valid_data in order to use this"""
         serializer = self.serializer_class(data=self.valid_data)
+
+        if request_context:
+            serializer.context['request'] = request_context
+
         self.assertTrue(serializer.is_valid())
 
-    def _test_invalid_data_part(self, invalid_data_part: dict):
+    def _test_invalid_data_part(self, invalid_data_part: dict, request_context = None):
         """You should define self.valid_data in order to use this"""
         invalid_data = self.valid_data.copy() | invalid_data_part
         serializer = self.serializer_class(data=invalid_data)
+
+        if request_context:
+            serializer.context['request'] = request_context
 
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
