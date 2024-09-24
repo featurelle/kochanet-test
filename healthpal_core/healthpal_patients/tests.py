@@ -4,8 +4,6 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import date, datetime, timedelta
 
-from rest_framework.exceptions import ValidationError
-
 from healthpal_shared.tests import BaseSerializerTestCase
 from .models import Patient, GenderChoices
 from .serializers import PatientSerializer
