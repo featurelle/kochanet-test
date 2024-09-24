@@ -2,6 +2,8 @@ Kochanet Test DRF Project - codename Healthpal
 ===
 The lightweight DRF/PostgreSQL app for patient and assessment management.
 Done MVP + bonus tasks.
+
+You can see it yourself at http://featurelle-kochanet-healthpal.space
 ***
 
 Setup
