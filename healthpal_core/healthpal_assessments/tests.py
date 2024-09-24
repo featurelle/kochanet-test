@@ -4,6 +4,7 @@ from healthpal_patients.models import Patient, GenderChoices
 from healthpal_shared.tests import BaseSerializerTestCase
 from .serializers import PatientAssessmentSerializer
 
+
 class PatientAssessmentSerializerTest(BaseSerializerTestCase):
 
     serializer_class = PatientAssessmentSerializer
