@@ -3,7 +3,8 @@ Kochanet Test DRF Project - codename Healthpal
 The lightweight DRF/PostgreSQL app for patient and assessment management.
 Done MVP + bonus tasks.
 
-Running demo http://featurelle-kochanet-healthpal.space (DEBUG is on for test purposes)
+Note: Running public demo on http://featurelle-kochanet-healthpal.space (DEBUG is on for test purposes)\
+You can test admin panel and API
 ***
 
 Setup
@@ -69,7 +70,7 @@ Prepare
     - Login and pass whatever you like
 3. Tests
     - `./manage.py test`
-4. Collect statics
+4. Collect statics files
     - `./manage.py collectstatic`
 
 Run
@@ -82,14 +83,19 @@ You can run simply typing `./manage.py runserver` or use nginx (for deploy):
        `server {`\
        `listen 80;`\
        `server_name _;`\
+       `location /static/ {`\
+       `alias /{full path to project}/static/;`\
+       `}`\
        `location / {`\
        `include proxy_params;`\
        `proxy_pass http://localhost:8000/;` \
+       `}`\
        `}`
    - `sudo ln -s /etc/nginx/sites-available/{site name} /etc/nginx/sites-enabled`
    - `nginx -t` check for the errors
    - `sudo systemctl restart nginx`
-2. Setup gunicorn:
+2. [Optional] Grant the permissions for dirs on the path to static dir to serve static with nginx if you get 403 OR change STATIC_ROOT setting to an outside-of-project location accessible by nginx
+3. Setup gunicorn:
    - `pip install gunicorn`
    - Create UNIT file to run as service:
      - `sudo nano /etc/systemd/system/{service name}.service`
