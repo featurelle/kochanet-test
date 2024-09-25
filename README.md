@@ -75,7 +75,7 @@ Prepare
 
 Run
 ---
-You can run simply typing `./manage.py runserver` or use nginx (for deploy):
+You can run simply typing `./manage.py runserver` or use nginx to serve and gunicorn to run the deamon (for deploy):
 1. Setup nginx:
    - `sudo apt install nginx -y`
    - `sudo nano /etc/nginx/sites-available/{site name}`
